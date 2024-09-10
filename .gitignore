@@ -10,3 +10,6 @@ poetry.lock
 
 # Ignorar arquivos de migrações
 api/migrations/
+
+# Ignorar arquivos de diretórios gerados
+arvore_diretorios.txt
