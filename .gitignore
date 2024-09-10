@@ -1,0 +1,12 @@
+# Ignorar pastas e arquivos compilados do Python
+__pycache__/
+*.py[cod]
+
+# Ignorar o banco de dados SQLite
+db.sqlite3
+
+# Ignorar o arquivo de lock do Poetry
+poetry.lock
+
+# Ignorar arquivos de migrações
+api/migrations/
