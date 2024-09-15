@@ -11,25 +11,22 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os  # Importa o módulo os para manipulação de caminhos e variáveis de ambiente
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Define o diretório base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
+# Chave secreta usada em produção - deve ser mantida segredo!
 SECRET_KEY = "django-insecure-toi%#a!sl+7#^g&vk8&m1_!$co#zzpf-#=)xhvm+fuf$d^g()q"
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# Define o modo de depuração - deve ser False em produção
+# skipcq: PY-S0900
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Define os hosts permitidos para a aplicação
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-
-# Application definition
-
+# Definição das aplicações instaladas
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -37,10 +34,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
-    "api",
+    "django_extensions",  # Extensões úteis para desenvolvimento
+    "order",  # Aplicação de pedidos
+    "product",  # Aplicação de produtos
+    "rest_framework",  # Django REST framework para criação de APIs
+    "debug_toolbar",  # Ferramenta de depuração
+    "rest_framework.authtoken",  # Autenticação por token para APIs
 ]
 
+# Definição dos middlewares
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -49,14 +51,18 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  # Middleware para a barra de ferramentas de depuração
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Middleware para servir arquivos estáticos
 ]
 
+# Definição do arquivo de configuração de URLs
 ROOT_URLCONF = "bookstore.urls"
 
+# Configuração dos templates
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "bookstore", "templates")],  # Diretório de templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -69,23 +75,31 @@ TEMPLATES = [
     },
 ]
 
+# Definição da aplicação WSGI
 WSGI_APPLICATION = "bookstore.wsgi.application"
 
+# Diretório para arquivos estáticos
+STATIC_URL = "static/"
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# Diretório para onde os arquivos estáticos serão coletados
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Configuração do armazenamento de arquivos estáticos com WhiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Configuração do banco de dados
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),  # Engine do banco de dados
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),  # Nome do banco de dados
+        "USER": os.environ.get("SQL_USER", "user"),  # Usuário do banco de dados
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),  # Senha do banco de dados
+        "HOST": os.environ.get("SQL_HOST", "localhost"),  # Host do banco de dados
+        "PORT": os.environ.get("SQL_PORT", "5432"),  # Porta do banco de dados
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+# Validação de senhas
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -101,25 +115,34 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
+# Configuração de internacionalização
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = "static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
+# Tipo de campo de chave primária padrão
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Configuração do Django REST framework
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 5,
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+}
+
+# IPs internos permitidos
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# Configuração do armazenamento de arquivos estáticos com WhiteNoise (preservado)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Diretório para arquivos estáticos (preservado)
+STATIC_ROOT = BASE_DIR / 'staticfiles'

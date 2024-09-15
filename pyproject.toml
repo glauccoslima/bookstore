@@ -3,7 +3,6 @@ name = "bookstore"
 version = "0.1.0"
 description = "BookStore API"
 authors = ["Glaucco Lima <glauccolima@gmail.com>"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -11,14 +10,15 @@ django = "^5.1.1"
 factory-boy = "^3.3.1"
 pytest = "^8.3.3"
 djangorestframework = "^3.14.0"
+django-debug-toolbar = "^4.4.6"
+django-extensions = "^3.2.3"
+gitpython = "^3.1.43"
+whitenoise = "^6.7.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 factory-boy = "^3.3.1"
 pytest-django = "^4.9.0"
-
-[tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "bookstore.settings"
 
 [build-system]
 requires = ["poetry-core"]
