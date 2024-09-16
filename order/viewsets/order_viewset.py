@@ -15,7 +15,7 @@ class OrderViewSet(ModelViewSet):
     authentication_classes = [
         SessionAuthentication,  # Autenticação de sessão
         BasicAuthentication,  # Autenticação básica
-        TokenAuthentication,  # Autenticação por token
+        TokenAuthentication,  # Autenticação por token de acesso
     ]
     # Define as permissões necessárias para acessar o ViewSet
     permission_classes = [IsAuthenticated]  # Requer que o usuário esteja autenticado
