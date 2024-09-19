@@ -54,7 +54,6 @@ build/
 pip-wheel-metadata/
 
 # Arquivos de lock do Poetry ou Pipenv, se não forem controlados pelo versionamento
-poetry.lock
 Pipfile.lock
 
 # Arquivos específicos de sistemas operacionais
