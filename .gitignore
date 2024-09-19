@@ -69,5 +69,5 @@ docker-compose.override.yml
 # Arquivos temporários relacionados ao git
 .git/
 
-# Excluir o arquivo gerar_log.py do versionamento
+# Excluir o arquivo gerar_log.py do versionamento do git
 gerar_log.py
