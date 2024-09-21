@@ -1,0 +1,73 @@
+# Nome do workflow para Pull Requests
+name: Python Pull Request Workflow
+
+# Evento que dispara o workflow: abertura de Pull Requests
+on: [pull_request]
+
+jobs:
+  # Job de qualidade de código (QA)
+  qa:
+    # Estratégia de build com diferentes versões do Python
+    strategy:
+      fail-fast: false # Continua executando outros jobs mesmo se um falhar
+      matrix:
+        python-version: [3.8, 3.9, 3.11] # Testa com múltiplas versões do Python
+
+    # Ambiente onde o job será executado
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo para fazer checkout do código do repositório
+      - uses: actions/checkout@v3
+
+      # Configura a versão do Python especificada na matriz
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Cache das dependências do Poetry para acelerar builds futuros
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pypoetry  # Cache do Poetry
+            ~/.virtualenvs  # Cache dos ambientes virtuais
+          key: ${{ runner.os }}-poetry-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }} # Chave do cache
+          restore-keys: |
+            ${{ runner.os }}-poetry-${{ matrix.python-version }}-  # Chaves de restauração
+
+      # Instala o Poetry
+      - name: Install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+        env:
+          POETRY_VIRTUALENVS_CREATE: false # Não cria ambientes virtuais separados
+
+      # Verifica se o Poetry foi instalado corretamente
+      - name: View poetry --help
+        run: poetry --help
+
+      # Instala as dependências do projeto usando Poetry
+      - name: Install dependencies
+        shell: bash
+        run: poetry install
+
+      # Executa o linter flake8 para verificar a qualidade do código
+      - name: Lint code
+        run: |
+          poetry run flake8 .
+
+      # Executa os testes do projeto
+      - name: Run tests
+        run: |
+          poetry run python manage.py test
+
+      # Executa o Wemake Python Styleguide para verificar a conformidade com o estilo de código
+      - name: Wemake Python Styleguide
+        uses: wemake-services/wemake-python-styleguide@0.16.0
+        continue-on-error: true # Continua mesmo se houver erros de estilo
+        with:
+          reporter: "github-pr-review" # Relatório no formato de revisão do GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Token de autenticação do GitHub
