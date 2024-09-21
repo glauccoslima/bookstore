@@ -1,0 +1,60 @@
+# Nome do workflow
+name: Python application
+
+# Evento que dispara o workflow
+on: [push]
+
+jobs:
+  build:
+    # Estratégia de build com diferentes versões do Python
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.11]
+
+    # Ambiente onde o job será executado
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo para fazer checkout do código do repositório
+      - uses: actions/checkout@v3
+
+      # Configura a versão do Python especificada na matriz
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Cache das dependências do Poetry para acelerar builds futuros
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pypoetry  # Cache do Poetry
+            ~/.virtualenvs  # Cache dos ambientes virtuais
+          key: ${{ runner.os }}-poetry-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }} # Chave do cache
+          restore-keys: |
+            ${{ runner.os }}-poetry-${{ matrix.python-version }}-  # Chaves de restauração
+
+      # Instala o Poetry
+      - name: Install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      # Verifica se o Poetry foi instalado corretamente
+      - name: View poetry --help
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry --help
+
+      # Instala as dependências do projeto usando Poetry
+      - name: Install dependencies
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry install --with dev  # Inclua dependências de desenvolvimento
+
+      # Executa os testes do projeto
+      - name: Test
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry run python manage.py test
