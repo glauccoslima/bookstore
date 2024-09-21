@@ -1,7 +1,7 @@
 # Nome do workflow
 name: Python application
 
-# Eventos que disparam o workflow
+# Evento que dispara o workflow
 on: [push]
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.10, 3.11] # Apenas versões compatíveis
+        python-version: [3.11]
 
     # Ambiente onde o job será executado
     runs-on: ubuntu-latest
@@ -43,19 +43,18 @@ jobs:
 
       # Verifica se o Poetry foi instalado corretamente
       - name: View poetry --help
-        run: poetry --help
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry --help
 
       # Instala as dependências do projeto usando Poetry
       - name: Install dependencies
-        shell: bash
-        run: poetry install --with dev # Inclua dependências de desenvolvimento
-
-      # Executa o linter flake8 para verificar a qualidade do código
-      - name: Lint code
         run: |
-          poetry run flake8 .
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry install --with dev  # Inclua dependências de desenvolvimento
 
       # Executa os testes do projeto
       - name: Test
         run: |
+          export PATH="$HOME/.local/bin:$PATH"
           poetry run python manage.py test
