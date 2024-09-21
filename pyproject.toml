@@ -23,6 +23,7 @@ pytest-django = "^4.9.0"
 pytest-html = "^4.1.1"
 pytest-tap = "^3.4"
 pytest-cov = "^5.0.0"
+flake8 = "^7.1.1"
 
 [build-system]
 requires = ["poetry-core"]
