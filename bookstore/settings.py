@@ -21,7 +21,7 @@ SECRET_KEY = "django-insecure-toi%#a!sl+7#^g&vk8&m1_!$co#zzpf-#=)xhvm+fuf$d^g()q
 
 # Define o modo de depuração - deve ser False em produção
 # skipcq: PY-S0900
-DEBUG = False  # Altere para False em produção
+DEBUG = True  # Altere para False em produção
 
 # Define os hosts permitidos para a aplicação
 ALLOWED_HOSTS = ['ebac-bookstore-api-glaucco.herokuapp.com', '.herokuapp.com']
