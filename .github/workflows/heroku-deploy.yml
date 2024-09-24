@@ -13,13 +13,26 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      # Etapa de verificação para garantir que estamos no repositório correto
-      - name: Verificar diretório
+      # Etapa 2: Instalar o Heroku CLI
+      - name: Instalar Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      # Etapa 3: Verificar diretório e status do Git
+      - name: Verificar diretório e status do Git
         run: |
           pwd
           ls -la
+          git status || git init
 
-      # Etapa 2: Deploy para o Heroku usando a ação akhileshns/heroku-deploy
+      # Etapa 4: Configurar o Heroku remote
+      - name: Configurar o Heroku remote
+        run: git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+
+      # Etapa 5: Deploy para o Heroku usando a ação akhileshns/heroku-deploy
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
