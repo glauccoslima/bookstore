@@ -9,30 +9,17 @@ jobs:
   heroku-deploy:
     runs-on: ubuntu-latest
     steps:
-      # Etapa 1: Fazer o checkout do repositório
+      # Etapa 1: Fazer o checkout do repositório (versão atualizada para v3)
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Etapa 2: Instalar o Heroku CLI
-      - name: Instalar Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-
-      # Etapa 3: Verificar diretório e status do Git e inicializar o Git se necessário
-      - name: Verificar diretório e status do Git
+      # Etapa de verificação para garantir que estamos no repositório correto
+      - name: Verificar diretório
         run: |
           pwd
           ls -la
-          git status || git init
 
-      # Etapa 4: Configurar o Heroku remote
-      - name: Configurar o Heroku remote
-        run: git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-
-      # Etapa 5: Deploy para o Heroku usando a ação akhileshns/heroku-deploy
+      # Etapa 2: Deploy para o Heroku usando a ação akhileshns/heroku-deploy
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -40,13 +27,17 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
 
+      # Substituição do set-output (atualizado para usar GITHUB_OUTPUT)
+      - name: Save Heroku app URL
+        run: echo "app_url=https://$HEROKU_APP_NAME.herokuapp.com" >> $GITHUB_OUTPUT
+
   custom-deploy:
     needs: heroku-deploy
     runs-on: ubuntu-latest
     steps:
-      # Etapa 1: Fazer o checkout do repositório com profundidade total
+      # Etapa 1: Fazer o checkout do repositório com profundidade total (versão atualizada para v3)
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
