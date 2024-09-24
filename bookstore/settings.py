@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-toi%#a!sl+7#^g&vk8&m1_!$co#zzpf-#=)xhvm+fuf$d^g()q
 DEBUG = True  # Altere para False em produção
 
 # Define os hosts permitidos para a aplicação
-ALLOWED_HOSTS = ['ebac-bookstore-api-glaucco.herokuapp.com', '.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'ebac-bookstore-api-glaucco.herokuapp.com', '.herokuapp.com']
 CSRF_TRUSTED_ORIGINS = ['https://ebac-bookstore-api-glaucco.herokuapp.com', 'https://ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
 
 # Definição das aplicações instaladas
