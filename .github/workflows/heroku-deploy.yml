@@ -18,7 +18,7 @@ jobs:
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
 
-      # Etapa 3: Verificar diretório e status do Git
+      # Etapa 3: Verificar diretório e status do Git e inicializar o Git se necessário
       - name: Verificar diretório e status do Git
         run: |
           pwd
