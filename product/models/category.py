@@ -11,6 +11,6 @@ class Category(models.Model):
     # Campo active para indicar se a categoria está ativa, padrão é True
     active = models.BooleanField(default=True)
 
-    # Método para representar o objeto Category como uma string
+    # Método para representar o objeto Category como uma string (título)
     def __unicode__(self):
         return self.title
