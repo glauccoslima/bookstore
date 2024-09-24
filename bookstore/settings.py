@@ -21,10 +21,11 @@ SECRET_KEY = "django-insecure-toi%#a!sl+7#^g&vk8&m1_!$co#zzpf-#=)xhvm+fuf$d^g()q
 
 # Define o modo de depuração - deve ser False em produção
 # skipcq: PY-S0900
-DEBUG = True
+DEBUG = False  # Altere para False em produção
 
 # Define os hosts permitidos para a aplicação
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
+ALLOWED_HOSTS = ['ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
 
 # Definição das aplicações instaladas
 INSTALLED_APPS = [
@@ -51,8 +52,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",  # Middleware para a barra de ferramentas de depuração
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Middleware para servir arquivos estáticos
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  # Middleware para a barra de ferramentas de depuração
 ]
 
 # Definição do arquivo de configuração de URLs
@@ -91,7 +92,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),  # Engine do banco de dados
-        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),  # Nome do banco de dados
+        "NAME": str(os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3")),  # Nome do banco de dados convertido em string
         "USER": os.environ.get("SQL_USER", "user"),  # Usuário do banco de dados
         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),  # Senha do banco de dados
         "HOST": os.environ.get("SQL_HOST", "localhost"),  # Host do banco de dados
@@ -136,13 +137,8 @@ REST_FRAMEWORK = {
     ],
 }
 
-# IPs internos permitidos
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
-# Configuração do armazenamento de arquivos estáticos com WhiteNoise (preservado)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Diretório para arquivos estáticos (preservado)
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# IPs internos permitidos para Debug Toolbar (desativar em produção)
+if DEBUG:
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
