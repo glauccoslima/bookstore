@@ -25,7 +25,7 @@ DEBUG = False  # Altere para False em produção
 
 # Define os hosts permitidos para a aplicação
 ALLOWED_HOSTS = ['ebac-bookstore-api-glaucco.herokuapp.com', '.herokuapp.com']
-CSRF_TRUSTED_ORIGINS = ['https://ebac-bookstore-api-glaucco.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://ebac-bookstore-api-glaucco.herokuapp.com', 'https://ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
 
 # Definição das aplicações instaladas
 INSTALLED_APPS = [
@@ -142,10 +142,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Diretórios adicionais onde o Django irá buscar arquivos estáticos (se houver)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles', 'admin'),
-    os.path.join(BASE_DIR, 'staticfiles', 'debug_toolbar'),
-    os.path.join(BASE_DIR, 'staticfiles', 'django_extensions'),
-    os.path.join(BASE_DIR, 'staticfiles', 'rest_framework'),
+    # Remova os diretórios inexistentes ou crie-os no projeto
+    # os.path.join(BASE_DIR, 'staticfiles', 'admin'),
+    # os.path.join(BASE_DIR, 'staticfiles', 'debug_toolbar'),
+    # os.path.join(BASE_DIR, 'staticfiles', 'django_extensions'),
+    # os.path.join(BASE_DIR, 'staticfiles', 'rest_framework'),
 ]
 
 # Configuração do armazenamento de arquivos estáticos com WhiteNoise
