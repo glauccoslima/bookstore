@@ -142,11 +142,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Diretórios adicionais onde o Django irá buscar arquivos estáticos (se houver)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'bookstore', 'static'),
-    os.path.join(BASE_DIR, 'order', 'static'),
-    os.path.join(BASE_DIR, 'product', 'static'),
+    os.path.join(BASE_DIR, 'staticfiles', 'admin'),
+    os.path.join(BASE_DIR, 'staticfiles', 'debug_toolbar'),
+    os.path.join(BASE_DIR, 'staticfiles', 'django_extensions'),
+    os.path.join(BASE_DIR, 'staticfiles', 'rest_framework'),
 ]
 
 # Configuração do armazenamento de arquivos estáticos com WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
