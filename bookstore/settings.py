@@ -24,8 +24,8 @@ SECRET_KEY = "django-insecure-toi%#a!sl+7#^g&vk8&m1_!$co#zzpf-#=)xhvm+fuf$d^g()q
 DEBUG = False  # Altere para False em produção
 
 # Define os hosts permitidos para a aplicação
-ALLOWED_HOSTS = ['ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
-CSRF_TRUSTED_ORIGINS = ['https://ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
+ALLOWED_HOSTS = ['ebac-bookstore-api-glaucco.herokuapp.com', '.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://ebac-bookstore-api-glaucco.herokuapp.com']
 
 # Definição das aplicações instaladas
 INSTALLED_APPS = [
@@ -78,15 +78,6 @@ TEMPLATES = [
 
 # Definição da aplicação WSGI
 WSGI_APPLICATION = "bookstore.wsgi.application"
-
-# Diretório para arquivos estáticos
-STATIC_URL = "static/"
-
-# Diretório para onde os arquivos estáticos serão coletados
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Configuração do armazenamento de arquivos estáticos com WhiteNoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Configuração do banco de dados
 DATABASES = {
@@ -142,3 +133,20 @@ if DEBUG:
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
+
+# Configurações de arquivos estáticos
+STATIC_URL = '/static/'  # URL base para arquivos estáticos
+
+# Diretório onde os arquivos estáticos serão coletados durante o deploy
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Diretórios adicionais onde o Django irá buscar arquivos estáticos (se houver)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'bookstore', 'static'),
+    os.path.join(BASE_DIR, 'order', 'static'),
+    os.path.join(BASE_DIR, 'product', 'static'),
+]
+
+# Configuração do armazenamento de arquivos estáticos com WhiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
