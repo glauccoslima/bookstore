@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os  # Importa o módulo os para manipulação de caminhos e variáveis de ambiente
+import dj_database_url
 
 # Define o diretório base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
