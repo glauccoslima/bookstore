@@ -6,6 +6,7 @@ env/
 *.py[cod]
 __pycache__/
 *.so
+*.pyc
 
 # Logs e arquivos temporários do sistema
 *.log
@@ -29,6 +30,7 @@ coverage.xml
 # Arquivos de banco de dados locais
 *.sqlite3
 *.db
+db.sqlite3
 
 # Arquivos de backup do editor
 *~

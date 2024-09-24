@@ -1,0 +1,76 @@
+name: Push Container to Heroku
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  heroku-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Etapa 1: Fazer o checkout do repositório
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # Etapa 2: Instalar o Heroku CLI
+      - name: Instalar Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      # Etapa 3: Verificar diretório e status do Git e inicializar o Git se necessário
+      - name: Verificar diretório e status do Git
+        run: |
+          pwd
+          ls -la
+          git status || git init
+
+      # Etapa 4: Configurar o Heroku remote
+      - name: Configurar o Heroku remote
+        run: git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+
+      # Etapa 5: Deploy para o Heroku usando a ação akhileshns/heroku-deploy
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+
+  custom-deploy:
+    needs: heroku-deploy
+    runs-on: ubuntu-latest
+    steps:
+      # Etapa 1: Fazer o checkout do repositório com profundidade total
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Etapa 2: Configurar credenciais de login para o Heroku
+      - name: Heroku login credentials
+        run: |
+          cat > ~/.netrc <<EOF
+            machine api.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+            machine git.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+          EOF
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+
+      # Etapa 3: Adicionar o repositório remoto do Heroku
+      - name: Add Heroku remote
+        run: heroku git:remote --app $HEROKU_APP_NAME
+        env:
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+
+      # Etapa 4: Fazer push para o Heroku
+      - name: Push to Heroku
+        run: git push heroku main:main

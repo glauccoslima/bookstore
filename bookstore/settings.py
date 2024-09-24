@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-toi%#a!sl+7#^g&vk8&m1_!$co#zzpf-#=)xhvm+fuf$d^g()q
 DEBUG = True
 
 # Define os hosts permitidos para a aplicação
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ebac-bookstore-api-glaucco-f29e1a0a5c0b.herokuapp.com']
 
 # Definição das aplicações instaladas
 INSTALLED_APPS = [
