@@ -38,9 +38,6 @@ db.sqlite3
 # Logs do Django
 *.log
 
-# Arquivos de migrações do Django
-migrations/
-
 # Arquivos estáticos e mídia gerados
 staticfiles/
 media/
